@@ -1,8 +1,8 @@
 package com.haibolian.libsys.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.haibolian.libsys.Mapper.BookMapper;
-import com.haibolian.libsys.common.Result;
 import com.haibolian.libsys.dto.BookQuery;
 import com.haibolian.libsys.entity.Book;
 import com.haibolian.libsys.service.BookService;
@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements BookService {
@@ -28,14 +29,21 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
         return bookMapper.insert(book) > 0;
     }
 
-    public List<Book> search(BookQuery query) {
-        return this.lambdaQuery().like(StringUtils.hasText(query.getName()), Book::getName, query.getName())
+    public Map<String, Object> search(BookQuery query) {
+        Page<Book> page = this.lambdaQuery()
+                .like(StringUtils.hasText(query.getName()), Book::getName, query.getName())
                 .like(StringUtils.hasText(query.getAuthor()), Book::getAuthor, query.getAuthor())
                 .like(StringUtils.hasText(query.getIsbn()), Book::getIsbn, query.getIsbn())
-                .list();
+                .page(new Page<>(query.getPageNum(), query.getPageSize()));
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("data", page.getRecords());
+        result.put("total", page.getTotal());
+        return result;
     }
 
     public boolean update(Book book) {
+        book.setUpdateTime(LocalDateTime.now());
         return this.updateById(book);
     }
 

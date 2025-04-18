@@ -8,8 +8,4 @@ import java.util.List;
 
 public interface BookService {
     boolean add(Book book);
-
-    List<Book> search(BookQuery query);
-
-
 }

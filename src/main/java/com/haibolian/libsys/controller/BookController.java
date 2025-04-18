@@ -1,5 +1,6 @@
 package com.haibolian.libsys.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.haibolian.libsys.common.Result;
 import com.haibolian.libsys.dto.BookQuery;
 import com.haibolian.libsys.entity.Book;
@@ -11,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/books")
@@ -20,8 +22,8 @@ public class BookController {
     private BookServiceImpl bookService;
 
     @GetMapping
-    public Result<List<Book>> search(BookQuery query){
-        List<Book> list = bookService.search(query);
+    public Result<?> listBooks(BookQuery query){
+        Map<String, Object> list = bookService.search(query);
         return Result.success(list);
     }
 

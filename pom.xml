@@ -61,8 +61,14 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
-            <version>3.5.11</version>
+            <version>3.5.8</version>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>3.5.8</version>
+        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
