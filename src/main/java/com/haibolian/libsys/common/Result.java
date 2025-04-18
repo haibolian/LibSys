@@ -39,4 +39,12 @@ public class Result<T> {
         return new Result<>(ResultCode.FAILED.getCode(), message);
     }
 
+    public static <T> Result<T> infer(boolean isSuccess, T successData, String failedMessage) {
+        if(isSuccess) {
+            return Result.success(successData);
+        }else {
+            return Result.failed(failedMessage);
+        }
+    }
+
 }

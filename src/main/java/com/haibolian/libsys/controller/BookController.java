@@ -4,6 +4,7 @@ import com.haibolian.libsys.common.Result;
 import com.haibolian.libsys.dto.BookQuery;
 import com.haibolian.libsys.entity.Book;
 import com.haibolian.libsys.service.BookService;
+import com.haibolian.libsys.service.impl.BookServiceImpl;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +17,7 @@ import java.util.List;
 public class BookController {
 
     @Autowired
-    private BookService bookService;
+    private BookServiceImpl bookService;
 
     @GetMapping
     public Result<List<Book>> search(BookQuery query){
@@ -25,17 +26,28 @@ public class BookController {
     }
 
     @PostMapping
-    public Result add(@Validated @RequestBody Book book) {
+    public Result<Boolean> add(@Validated @RequestBody Book book) {
         if(bookService.add(book)){
-            return Result.success();
+            return Result.success(true);
         }else {
             return Result.failed();
         }
     }
 
-    @DeleteMapping
-    public Result delete(@PathVariable Long id) {
-        return Result.failed();
+    @PutMapping
+    public Result<Boolean> update(@Validated @RequestBody Book book){
+        boolean isSuccess = bookService.update(book);
+        return Result.infer(isSuccess, true, "更新失败");
+    }
+
+    @DeleteMapping("/{id}")
+    public Result<Boolean> delete(@PathVariable Long id) {
+        boolean isSuccess = bookService.delete(id);
+        if(isSuccess) {
+            return Result.success(true);
+        }else {
+            return Result.failed("删除失败");
+        }
     }
 
 }

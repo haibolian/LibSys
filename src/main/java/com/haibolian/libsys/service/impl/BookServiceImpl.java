@@ -34,4 +34,14 @@ public class BookServiceImpl extends ServiceImpl<BookMapper, Book> implements Bo
                 .like(StringUtils.hasText(query.getIsbn()), Book::getIsbn, query.getIsbn())
                 .list();
     }
+
+    public boolean update(Book book) {
+        return this.updateById(book);
+    }
+
+    public boolean delete(Long id) {
+        boolean exists = this.lambdaQuery().eq(Book::getId, id).exists();
+        if(!exists) throw new IllegalArgumentException("id不存在");
+        return this.removeById(id);
+    }
 }
